@@ -1,0 +1,65 @@
+name: track_bar
+description: A new Flutter project.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.5 <4.0.0'
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: 
+  sensors_plus: ^3.0.2
+
+  
+  # StateManagement & DI
+  hooks_riverpod: 
+  riverpod_annotation: 
+  flutter_hooks: 
+  freezed_annotation: 
+  json_annotation:
+
+  # FP
+  fpdart:
+  rxdart: 
+
+ #Images
+  lottie:
+
+  
+  logging:
+  fluttertoast:
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+  # Lints
+  very_good_analysis: 
+  custom_lint: 
+  riverpod_lint: 
+
+  # Code gen
+  build_runner: 
+  riverpod_generator: 
+  freezed:
+
+
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/icons/
+    - assets/icons/dialog_widget_icons/
+    - assets/images/core/
+
+
