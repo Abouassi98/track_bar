@@ -18,6 +18,6 @@ class StartSensorUseCase implements UseCaseNoParamsBase<void> {
   @override
   void call() {
     sensorRepo.start();
-    print('afafsafs');
+  
   }
 }

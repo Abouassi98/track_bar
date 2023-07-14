@@ -13,6 +13,7 @@ final _log = Logger('ConnectionLogger');
 (StreamSubscription<MagnetometerEvent>, Stream<MagnetometerEvent>)
     setupConnection(SetupConnectionRef ref) {
   final controller = StreamController<MagnetometerEvent>();
+  
   final connectionStatusSubscription = magnetometerEvents.listen(
     (MagnetometerEvent event) {
       _log.fine('MagnetometerEven status changed: $event');

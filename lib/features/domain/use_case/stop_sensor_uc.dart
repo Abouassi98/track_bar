@@ -17,6 +17,6 @@ class StopSensorUseCase implements UseCaseNoParamsBase<void> {
   @override
   void call() {
     sensorRepo.stop();
-    print('sddssd');
+   
   }
 }

@@ -1,30 +1,29 @@
+import 'package:sensors_plus/sensors_plus.dart';
 
 enum SensorType {
   radar,
   magneticField,
 }
 
-abstract class Sensor {
+abstract class ISensor {
   SensorType get type;
-  String get id;
+  MagnetometerEvent get data;
 }
 
-class RadarSensor implements Sensor {
-
-  RadarSensor({required this.id});
+class RadarSensor implements ISensor {
+  RadarSensor({required this.data});
   @override
   SensorType get type => SensorType.radar;
 
   @override
-  String id;
+  MagnetometerEvent data;
 }
 
-class MagneticFieldSensor implements Sensor {
-
-  MagneticFieldSensor({required this.id});
+class MagneticFieldSensor implements ISensor {
+  MagneticFieldSensor({required this.data});
   @override
   SensorType get type => SensorType.magneticField;
 
   @override
-  String id;
+  MagnetometerEvent data;
 }
