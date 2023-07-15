@@ -1,20 +1,30 @@
+import 'package:flutter/widgets.dart';
+
 import '../../../core/presentation/providers/provider_utils.dart';
 import '../../../core/presentation/services/connection_stream_service.dart';
 import '../../../core/presentation/utils/event.dart';
 import '../../../core/presentation/utils/fp_framework.dart';
 import '../../../core/presentation/utils/riverpod_framework.dart';
+import '../../../core/presentation/utils/toasts.dart';
 import '../../domain/use_case/stop_sensor_uc.dart';
 import 'connection_state_provider.dart';
 part 'stop_connect_provider.g.dart';
 
 @riverpod
-FutureOr<ConnectionStatus> stopConnectState(StopConnectStateRef ref) {
+FutureOr<ConnectionStatus> stopConnectState(
+  StopConnectStateRef ref,
+  BuildContext context,
+) {
   final sub = ref.listen(connectStateProvider.notifier, (prev, next) {});
   ref.listenSelf((previous, next) {
     next.whenData(
       (state) {
         if (state == ConnectionStatus.disconnected) {
           sub.read().stopConnect();
+          Toasts.showConnectionToast(
+            context,
+            connectionStatus: ConnectionStatus.connected,
+          );
         }
       },
     );

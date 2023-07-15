@@ -6,23 +6,7 @@ part of 'stop_connect_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$stopConnectStateHash() => r'5ae4a92b38849f4d92bf88772749f26a6c3e3053';
-
-/// See also [stopConnectState].
-@ProviderFor(stopConnectState)
-final stopConnectStateProvider =
-    AutoDisposeFutureProvider<ConnectionStatus>.internal(
-  stopConnectState,
-  name: r'stopConnectStateProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$stopConnectStateHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef StopConnectStateRef = AutoDisposeFutureProviderRef<ConnectionStatus>;
-String _$stopConnectHash() => r'a558e159322dad7263e7d8ab401a49d785402044';
+String _$stopConnectStateHash() => r'a6cdc6e3c636f6dfc68a93782120efd5df476ec5';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -45,6 +29,89 @@ class _SystemHash {
   }
 }
 
+typedef StopConnectStateRef = AutoDisposeFutureProviderRef<ConnectionStatus>;
+
+/// See also [stopConnectState].
+@ProviderFor(stopConnectState)
+const stopConnectStateProvider = StopConnectStateFamily();
+
+/// See also [stopConnectState].
+class StopConnectStateFamily extends Family<AsyncValue<ConnectionStatus>> {
+  /// See also [stopConnectState].
+  const StopConnectStateFamily();
+
+  /// See also [stopConnectState].
+  StopConnectStateProvider call(
+    BuildContext context,
+  ) {
+    return StopConnectStateProvider(
+      context,
+    );
+  }
+
+  @override
+  StopConnectStateProvider getProviderOverride(
+    covariant StopConnectStateProvider provider,
+  ) {
+    return call(
+      provider.context,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'stopConnectStateProvider';
+}
+
+/// See also [stopConnectState].
+class StopConnectStateProvider
+    extends AutoDisposeFutureProvider<ConnectionStatus> {
+  /// See also [stopConnectState].
+  StopConnectStateProvider(
+    this.context,
+  ) : super.internal(
+          (ref) => stopConnectState(
+            ref,
+            context,
+          ),
+          from: stopConnectStateProvider,
+          name: r'stopConnectStateProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$stopConnectStateHash,
+          dependencies: StopConnectStateFamily._dependencies,
+          allTransitiveDependencies:
+              StopConnectStateFamily._allTransitiveDependencies,
+        );
+
+  final BuildContext context;
+
+  @override
+  bool operator ==(Object other) {
+    return other is StopConnectStateProvider && other.context == context;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, context.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+String _$stopConnectHash() => r'a558e159322dad7263e7d8ab401a49d785402044';
 typedef StopConnectRef = AutoDisposeFutureProviderRef<void>;
 
 /// See also [stopConnect].

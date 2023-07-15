@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import '../../../core/presentation/services/connection_stream_service.dart';
 import '../../../core/presentation/utils/event.dart';
 import '../../../core/presentation/utils/fp_framework.dart';
@@ -8,6 +7,7 @@ import '../../../core/presentation/widgets/custom_text.dart';
 import '../../../core/presentation/widgets/loading_indicators.dart';
 import '../../domain/entity/sensor.dart';
 import '../components/retry_again_component.dart';
+import '../providers/bluetooth_provider.dart';
 import '../providers/get_data_provider.dart';
 import '../providers/start_connect_provider.dart';
 import '../providers/stop_connect_provider.dart';
@@ -17,14 +17,17 @@ class TrackbarApp extends HookConsumerWidget {
   const TrackbarApp({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+//////////////////////////////////////////////////////////////////////////
+
+    final bluetoothDevicesAsync = ref.watch(bluetoothDevicesProvider);
     ref.listen(setupConnectionProvider, (prevState, newState) {});
-    //ref.listen(connectStateProvider, (prevState, newState) {});
-    ref.easyListen(startConnectStateProvider);
-    ref.easyListen(stopConnectStateProvider);
+    ref.easyListen(startConnectStateProvider(context));
+    ref.easyListen(stopConnectStateProvider(context));
     final connectionDataAsync = ref.watch(getDataProvider);
     void startSensor() => ref
         .read(startSensorEventProvider.notifier)
         .update((_) => Some(Event.unique(unit)));
+
     void stopSensor() => ref
         .read(stopConnectEventProvider.notifier)
         .update((_) => Some(Event.unique(unit)));
@@ -36,6 +39,53 @@ class TrackbarApp extends HookConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // bluetoothDevicesAsync.when(
+            //   skipLoadingOnReload: true,
+            //   skipLoadingOnRefresh: !bluetoothDevicesAsync.hasError,
+            //   loading: () => LoadingIndicators.defaultLoadingIndicator(
+            //     context,
+            //     message: 'connecting...',
+            //   ),
+            //   error: (error, st) => RetryAgainComponent(
+            //     description: error.toString(),
+            //     onPressed: () {
+            //       ref.invalidate(bluetoothDevicesProvider);
+            //     },
+            //   ),
+            //   data: (data) => Flexible(
+            //     fit: FlexFit.tight,
+            //     child: ListView.builder(
+            //       itemCount: data.length,
+            //       itemBuilder: (context, index) => InkWell(
+            //         onTap: () async {
+            //           await BlueThermalPrinter.instance.isConnected
+            //               .then((isConnected) async {
+            //             if (!isConnected!) {
+            //               try {
+            //                 await BlueThermalPrinter.instance.connect(
+            //                   BluetoothDevice(
+            //                     data[index].name,
+            //                     data[index].address,
+            //                   ),
+            //                 );
+            //               } on PlatformException {
+            //                 await Toasts.showBackgroundMessageToast(
+            //                   context,
+            //                   message:
+            //                       'Failed to connect bluetooth. Try to restart the device',
+            //                 );
+            //               }
+            //             }
+            //           });
+            //         },
+            //         child: Padding(
+            //           padding: const EdgeInsets.all(8),
+            //           child: Card(child: Text(data[index].name ?? '')),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
             connectionDataAsync.when(
               skipLoadingOnReload: true,
               skipLoadingOnRefresh: !connectionDataAsync.hasError,
@@ -57,61 +107,19 @@ class TrackbarApp extends HookConsumerWidget {
               ),
             ),
             ElevatedButton(
-              onPressed:
-                  ref.isLoading(startConnectStateProvider) ? null : startSensor,
+              onPressed: ref.isLoading(startConnectStateProvider(context))
+                  ? null
+                  : startSensor,
               child: CustomText.f14(context, 'Start Sensor'),
             ),
             ElevatedButton(
-              onPressed:
-                  ref.isLoading(stopConnectStateProvider) ? null : stopSensor,
+              onPressed: ref.isLoading(stopConnectStateProvider(context))
+                  ? null
+                  : stopSensor,
               child: CustomText.f14(context, 'Stop Sensor'),
-            ),
-            StreamBuilder<List<ScanResult>>(
-              stream: FlutterBluePlus.instance.scanResults,
-              initialData: const [],
-              builder: (c, snapshot) {
-                return Column(
-                  children: snapshot.data!
-                      .map(
-                        (r) => InkWell(
-                          onTap: () {
-                            r.device.connect();
-                          },
-                          child: CustomText.f16(
-                            context,
-                            r.advertisementData.localName,
-                            color: Colors.black,
-                          ),
-                        ),
-                      )
-                      .toList(),
-                );
-              },
             ),
           ],
         ),
-      ),
-      floatingActionButton: StreamBuilder<bool>(
-        stream: FlutterBluePlus.instance.isScanning,
-        initialData: false,
-        builder: (c, snapshot) {
-          if (snapshot.data!) {
-            return FloatingActionButton(
-              onPressed: () => FlutterBluePlus.instance.stopScan(),
-              backgroundColor: Colors.red,
-              child: const Icon(Icons.stop),
-            );
-          } else {
-            return FloatingActionButton(
-              child: const Icon(Icons.search),
-              onPressed: () => FlutterBluePlus.instance
-                  .startScan(timeout: const Duration(seconds: 60))
-                  .then(
-                    (value) => debugPrint('efeffe=$value'),
-                  ),
-            );
-          }
-        },
       ),
     );
   }
